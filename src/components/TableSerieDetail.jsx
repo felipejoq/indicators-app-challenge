@@ -2,6 +2,8 @@ import {Table} from "react-bootstrap";
 import {useRef} from "react";
 import {formatDateToLocale} from "../helpers/dateFormatter.js";
 import {clpFormat, percentFormat} from "../helpers/currencyFormatter.js";
+import { v4 as uuidv4 } from 'uuid';
+
 
 export const TableSerieDetail = ({series = [], unidad=''}) => {
 
@@ -20,7 +22,7 @@ export const TableSerieDetail = ({series = [], unidad=''}) => {
         <tbody>
         {
           series.map(serie => (
-            <tr key={self.crypto.randomUUID()}>
+            <tr key={uuidv4()}>
               <td>{formatDateToLocale(serie.fecha)}</td>
               <td className="text-center">
                 {

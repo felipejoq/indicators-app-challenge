@@ -3,3 +3,12 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.loader {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}

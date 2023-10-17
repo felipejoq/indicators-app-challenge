@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import {IndicatorCard} from "./components/IndicatorCard.jsx";
 import {IndicatorDetails} from "./components/IndicatorDetails.jsx";
 import {formatDateToLocale} from "./helpers/dateFormatter.js";
+import {Loading} from "./components/Loader.jsx";
+import {Footer} from "./components/Footer.jsx";
 
 const url = `https://mindicador.cl/api`;
 const IndicatorsApp = () => {
@@ -12,6 +14,8 @@ const IndicatorsApp = () => {
   const [showDetails, setShowDetails] = useState(false);
   const [textSearch, setTextSearch] = useState('');
   const [searchResult, setSearchResult] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadingDetails, setLoadingDetails] = useState(false);
 
   const handleClickIndicatorDetail = (indicator) => {
     setIndicatorDetail({
@@ -38,19 +42,23 @@ const IndicatorsApp = () => {
   }, [codigo]);
 
   const getIndicators = async () => {
+    setLoading(true);
     const response = await fetch(`${url}`);
     const result = await response.json();
     const indicatorsClean = cleanIndicatorsData(result);
     setIndicators(indicatorsClean);
+    setLoading(false);
   }
 
   const getIndicatorByCode = async (codigo) => {
+    setLoadingDetails(true);
     const response = await fetch(`${url}/${codigo}`);
     const indicator = await response.json();
     setIndicatorDetail({
       ...indicatorDetail,
       ...indicator
-    })
+    });
+    setLoadingDetails(false);
   }
 
   const cleanIndicatorsData = (result) => {
@@ -75,7 +83,7 @@ const IndicatorsApp = () => {
   const getSearchByTerm = (term, indicators = []) => {
     return indicators.filter(indicator => {
       for (const key in indicator) {
-        if(indicator[key].toString().toLowerCase().includes(term.toLowerCase().trim())) {
+        if (indicator[key].toString().toLowerCase().includes(term.toLowerCase().trim())) {
           return indicator;
         }
       }
@@ -99,29 +107,31 @@ const IndicatorsApp = () => {
       <hr/>
       <div className="row row-cols-3">
         {
-          !textSearch ?
-            indicators.map(indicator => (
-              <IndicatorCard
-                key={indicator["codigo"]}
-                indicator={indicator}
-                showDetails={showDetails}
-                handleClickIndicatorDetail={handleClickIndicatorDetail}
-                handleCloseDetails={handleCloseDetails}
-                handleShowDetails={handleShowDetails}
-                indicatorDetail={indicatorDetail}
-              />
-            )) :
-            searchResult.map(indicator => (
-              <IndicatorCard
-                key={indicator["codigo"]}
-                indicator={indicator}
-                showDetails={showDetails}
-                handleClickIndicatorDetail={handleClickIndicatorDetail}
-                handleCloseDetails={handleCloseDetails}
-                handleShowDetails={handleShowDetails}
-                indicatorDetail={indicatorDetail}
-              />
-            ))
+          loading ?
+            <Loading/> :
+            !textSearch ?
+              indicators.map(indicator => (
+                <IndicatorCard
+                  key={indicator["codigo"]}
+                  indicator={indicator}
+                  showDetails={showDetails}
+                  handleClickIndicatorDetail={handleClickIndicatorDetail}
+                  handleCloseDetails={handleCloseDetails}
+                  handleShowDetails={handleShowDetails}
+                  indicatorDetail={indicatorDetail}
+                />
+              )) :
+              searchResult.map(indicator => (
+                <IndicatorCard
+                  key={indicator["codigo"]}
+                  indicator={indicator}
+                  showDetails={showDetails}
+                  handleClickIndicatorDetail={handleClickIndicatorDetail}
+                  handleCloseDetails={handleCloseDetails}
+                  handleShowDetails={handleShowDetails}
+                  indicatorDetail={indicatorDetail}
+                />
+              ))
         }
       </div>
 
@@ -129,7 +139,10 @@ const IndicatorsApp = () => {
         showDetails={showDetails}
         handleCloseDetails={handleCloseDetails}
         indicatorDetail={indicatorDetail}
+        loadingDetails={loadingDetails}
       />
+
+      <Footer />
     </div>
   )
 }
