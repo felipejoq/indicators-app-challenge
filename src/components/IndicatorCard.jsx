@@ -1,9 +1,18 @@
 import {Button, Card} from "react-bootstrap";
+import {IndicatorDetails} from "./IndicatorDetails.jsx";
 
-export const IndicatorCard = ({indicator = {}}) => {
+export const IndicatorCard = ({
+                                indicator = {},
+                                showDetails,
+                                handleShowDetails,
+                                handleClickIndicatorDetail,
+                                handleCloseDetails,
+                                indicatorDetail
+                              }) => {
 
-  const handleClickDetails = (codigo) => {
-    console.log(`Click on indicator with code: ${codigo}`)
+  const handleClickDetails = (indicator) => {
+    handleShowDetails(true);
+    handleClickIndicatorDetail(indicator);
   }
 
   return (
@@ -25,10 +34,10 @@ export const IndicatorCard = ({indicator = {}}) => {
         </Card.Body>
         <Card.Footer>
           <Button
-            onClick={() => handleClickDetails(indicator["codigo"])}
+            onClick={() => handleClickDetails(indicator)}
             className="w-100"
             variant="primary">
-            Primary
+            Detalles
           </Button>
         </Card.Footer>
       </Card>
