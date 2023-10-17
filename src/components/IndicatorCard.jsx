@@ -1,13 +1,11 @@
-import {Button, Card} from "react-bootstrap";
-import {IndicatorDetails} from "./IndicatorDetails.jsx";
+import {Button, Card, ListGroup} from "react-bootstrap";
+import {clpFormat, percentFormat} from "../helpers/currencyFormatter.js";
+import {formatDateToLocale} from "../helpers/dateFormatter.js";
 
 export const IndicatorCard = ({
                                 indicator = {},
-                                showDetails,
                                 handleShowDetails,
-                                handleClickIndicatorDetail,
-                                handleCloseDetails,
-                                indicatorDetail
+                                handleClickIndicatorDetail
                               }) => {
 
   const handleClickDetails = (indicator) => {
@@ -19,18 +17,24 @@ export const IndicatorCard = ({
     <div className="col mb-2 d-flex align-items-stretch">
       <Card className="w-100">
         <Card.Body>
-          <Card.Title>
-            {indicator["nombre"]}
-          </Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">
-            Valor: {indicator["valor"]}
-          </Card.Subtitle>
-          <Card.Text>
-            Unidad de medida: {indicator["unidad_medida"]}
-          </Card.Text>
-          <Card.Text>
-            Código: {indicator["codigo"]}
-          </Card.Text>
+          <ListGroup>
+            <ListGroup.Item className="fw-bold">
+              📊 {indicator["nombre"]}
+            </ListGroup.Item>
+            <ListGroup.Item>
+              💰 Valor: {
+              indicator["unidad_medida"] === "Pesos" ?
+                clpFormat(indicator["valor"]) :
+                percentFormat(indicator["valor"])
+            }
+            </ListGroup.Item>
+            <ListGroup.Item>
+              📐 {indicator["unidad_medida"]}
+            </ListGroup.Item>
+            <ListGroup.Item>
+              🆔 Código: {indicator["codigo"]}
+            </ListGroup.Item>
+          </ListGroup>
         </Card.Body>
         <Card.Footer>
           <Button
