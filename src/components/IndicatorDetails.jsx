@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {Button, ListGroup, Modal} from "react-bootstrap";
+import {TableSerieDetail} from "./TableSerieDetail.jsx";
 
 export const IndicatorDetails = ({showDetails, handleCloseDetails, indicatorDetail = {}}) => {
 
@@ -16,7 +17,9 @@ export const IndicatorDetails = ({showDetails, handleCloseDetails, indicatorDeta
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Detalles</Modal.Title>
+          <Modal.Title>
+            {indicatorDetail["nombre"]} - Detalles
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <ListGroup>
@@ -34,6 +37,9 @@ export const IndicatorDetails = ({showDetails, handleCloseDetails, indicatorDeta
             </ListGroup.Item>
             <ListGroup.Item>
               Valor: {indicatorDetail["valor"]}
+            </ListGroup.Item>
+            <ListGroup.Item>
+              <TableSerieDetail series={indicatorDetail["serie"]} />
             </ListGroup.Item>
           </ListGroup>
         </Modal.Body>
