@@ -17,25 +17,48 @@ export const useIndicators = () => {
   const [indicators, setIndicators] = useState([]);
   const [indicatorDetail, setIndicatorDetail] = useState({})
   const [data, setData] = useState([]);
+  const [hasErrors, setHasErrors] = useState({})
 
   useEffect(() => {
     if (!codigo) {
       (async () => {
-        setLoading(true);
-        const indicatorsClean = await getIndicators();
-        setIndicators(indicatorsClean);
-        setData(indicatorsClean);
-        setLoading(false);
+        try {
+          setLoading(true);
+          const indicatorsClean = await getIndicators();
+          setIndicators(indicatorsClean);
+          setData(indicatorsClean);
+          setLoading(false);
+          setHasErrors({
+            error: false
+          });
+        } catch (e) {
+          setHasErrors({
+            error: true,
+            message: e.message
+          });
+          setLoading(false);
+        }
       })()
     } else {
       (async () => {
-        setLoadingDetails(true);
-        const indicator = await getIndicatorByCode(codigo);
-        setIndicatorDetail({
-          ...indicatorDetail,
-          ...indicator
-        });
-        setLoadingDetails(false);
+        try {
+          setLoadingDetails(true);
+          const indicator = await getIndicatorByCode(codigo);
+          setIndicatorDetail({
+            ...indicatorDetail,
+            ...indicator
+          });
+          setLoadingDetails(false);
+          setHasErrors({
+            error: false
+          });
+        } catch (e) {
+          setHasErrors({
+            error: true,
+            message: e.message
+          });
+          setLoadingDetails(false);
+        }
       })()
     }
   }, [codigo]);
@@ -80,6 +103,7 @@ export const useIndicators = () => {
     loading,
     loadingDetails,
     showDetails,
+    hasErrors,
     handleSearchInputText,
     filterByUnit,
     handleCloseDetails,
