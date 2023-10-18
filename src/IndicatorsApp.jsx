@@ -25,23 +25,6 @@ const IndicatorsApp = () => {
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [data, setData] = useState([])
 
-  const handleClickIndicatorDetail = (indicator) => {
-    setIndicatorDetail({
-      ...indicatorDetail,
-      fecha: indicator["fecha"],
-      valor: indicator["valor"]
-    })
-    setCodigo(indicator["codigo"]);
-  }
-
-  const handleCloseDetails = (isShow) => {
-    setShowDetails(isShow)
-  };
-
-  const handleShowDetails = (isShow) => {
-    setShowDetails(isShow)
-  };
-
   useEffect(() => {
     (async () => {
       setLoading(true);
@@ -65,6 +48,23 @@ const IndicatorsApp = () => {
     })()
 
   }, [codigo]);
+
+  const handleClickIndicatorDetail = (indicator) => {
+    setIndicatorDetail({
+      ...indicatorDetail,
+      fecha: indicator["fecha"],
+      valor: indicator["valor"]
+    })
+    setCodigo(indicator["codigo"]);
+  }
+
+  const handleCloseDetails = (isShow) => {
+    setShowDetails(isShow)
+  };
+
+  const handleShowDetails = (isShow) => {
+    setShowDetails(isShow)
+  };
 
   const handleSearchInputText = ({target}) => {
     const {value} = target;
