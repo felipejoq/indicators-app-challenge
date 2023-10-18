@@ -9,7 +9,11 @@ en la página haciendo uso de los Hooks de react.js para mantener y manejar los 
 
 ℹ️ Los requisitos del desafío quedan expresados en el siguiente 👉 [Archivo PDF](https://github.com/felipejoq/indicators-app-challenge/blob/main/01_prueba_react_1.pdf?raw=true).
 
-👉 [Live Demo](https://felipejoq.github.io/indicators-app-challenge/)
+👉 [Live Demo](https://felipejoq.github.io/indicators-app-challenge/) 📊
+
+## Video Explicativo
+
+👉 📹 [Video Explicativo](https://youtu.be/y6ir5YiI1J0) 👀
 
 ## Stack utilizado:
 
