@@ -27,7 +27,7 @@ const IndicatorsApp = () => {
   return (
     <div className="container my-4 bg-light rounded p-4">
       <h1>Indicadores Económicos Chile 🇨🇱</h1>
-      <h4><i className="bi bi-calendar4"></i> {formatDateToLocale(data[0]?.fecha)}</h4>
+      <h4><i className="bi bi-calendar4"></i> {formatDateToLocale(new Date())}</h4>
       <hr/>
       <div className="row">
         <Search
