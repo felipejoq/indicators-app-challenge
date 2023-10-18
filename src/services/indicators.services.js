@@ -1,4 +1,5 @@
 const url = `https://mindicador.cl/api`;
+const errorMessage = 'Error al obtener los datos del servicio. Intente más tarde.'
 
 const cleanIndicatorsData = (result) => {
   const indicatorsMap = [];
@@ -10,12 +11,18 @@ const cleanIndicatorsData = (result) => {
 
 export const getIndicators = async () => {
   const response = await fetch(`${url}`);
+  if(!response.ok) {
+    throw new Error(errorMessage)
+  }
   const result = await response.json();
   return cleanIndicatorsData(result);
 }
 
 export const getIndicatorByCode = async (codigo) => {
   const response = await fetch(`${url}/${codigo}`);
+  if(!response.ok) {
+    throw new Error(errorMessage)
+  }
   return await response.json();
 }
 

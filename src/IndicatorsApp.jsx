@@ -17,6 +17,7 @@ const IndicatorsApp = () => {
     loading,
     loadingDetails,
     showDetails,
+    hasErrors,
     handleSearchInputText,
     filterByUnit,
     handleShowDetails,
@@ -58,6 +59,10 @@ const IndicatorsApp = () => {
         {
           (data.length === 0) &&
           <InfoMessage message={'No hay resultados...'} variant={"info"}/>
+        }
+        {
+          hasErrors.error &&
+            <InfoMessage message={hasErrors.message} variant={"danger"}/>
         }
       </div>
 
