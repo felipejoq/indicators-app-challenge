@@ -4,8 +4,16 @@ import {IndicatorDetails} from "./components/IndicatorDetails.jsx";
 import {formatDateToLocale} from "./helpers/dateFormatter.js";
 import {Loading} from "./components/Loader.jsx";
 import {Footer} from "./components/Footer.jsx";
+import {InfoMessage} from "./components/Alert.jsx";
+import {
+  getIndicatorByCode,
+  getIndicatorByTerm,
+  getIndicatorByUnit,
+  getIndicators
+} from "./services/indicators.services.js";
+import {Badge} from "react-bootstrap";
+import {Filters} from "./components/Filters.jsx";
 
-const url = `https://mindicador.cl/api`;
 const IndicatorsApp = () => {
 
   const [indicators, setIndicators] = useState([]);
@@ -13,9 +21,9 @@ const IndicatorsApp = () => {
   const [indicatorDetail, setIndicatorDetail] = useState({})
   const [showDetails, setShowDetails] = useState(false);
   const [textSearch, setTextSearch] = useState('');
-  const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadingDetails, setLoadingDetails] = useState(false);
+  const [data, setData] = useState([])
 
   const handleClickIndicatorDetail = (indicator) => {
     setIndicatorDetail({
@@ -29,65 +37,48 @@ const IndicatorsApp = () => {
   const handleCloseDetails = (isShow) => {
     setShowDetails(isShow)
   };
+
   const handleShowDetails = (isShow) => {
     setShowDetails(isShow)
   };
 
   useEffect(() => {
-    getIndicators();
+    (async () => {
+      setLoading(true);
+      const indicatorsClean = await getIndicators();
+      setIndicators(indicatorsClean);
+      setData(indicatorsClean);
+      setLoading(false);
+    })()
+
   }, []);
 
   useEffect(() => {
-    getIndicatorByCode(codigo)
+    (async () => {
+      setLoadingDetails(true);
+      const indicator = await getIndicatorByCode(codigo);
+      setIndicatorDetail({
+        ...indicatorDetail,
+        ...indicator
+      });
+      setLoadingDetails(false);
+    })()
+
   }, [codigo]);
-
-  const getIndicators = async () => {
-    setLoading(true);
-    const response = await fetch(`${url}`);
-    const result = await response.json();
-    const indicatorsClean = cleanIndicatorsData(result);
-    setIndicators(indicatorsClean);
-    setLoading(false);
-  }
-
-  const getIndicatorByCode = async (codigo) => {
-    setLoadingDetails(true);
-    const response = await fetch(`${url}/${codigo}`);
-    const indicator = await response.json();
-    setIndicatorDetail({
-      ...indicatorDetail,
-      ...indicator
-    });
-    setLoadingDetails(false);
-  }
-
-  const cleanIndicatorsData = (result) => {
-    const indicatorsMap = [];
-    for (const indicator in result) {
-      indicatorsMap.push(result[indicator]);
-    }
-    return indicatorsMap.filter(indicator => indicator["codigo"]);
-  }
-
-  const handleSubmitSearchInput = (event) => {
-    event.preventDefault();
-    setSearchResult(getSearchByTerm(textSearch, indicators))
-  }
 
   const handleSearchInputText = ({target}) => {
     const {value} = target;
-    setTextSearch(value);
-    setSearchResult(getSearchByTerm(value, indicators))
+    if (value.length > 0) {
+      setTextSearch(value);
+      setData(getIndicatorByTerm(value, indicators));
+    } else {
+      setTextSearch(value);
+      setData([...indicators])
+    }
   }
 
-  const getSearchByTerm = (term, indicators = []) => {
-    return indicators.filter(indicator => {
-      for (const key in indicator) {
-        if (indicator[key].toString().toLowerCase().includes(term.toLowerCase().trim())) {
-          return indicator;
-        }
-      }
-    })
+  const filterByUnit = (term) => {
+    setData(getIndicatorByUnit(term, indicators));
   }
 
   return (
@@ -95,43 +86,40 @@ const IndicatorsApp = () => {
       <h1>Indicadores Económicos Chile 🇨🇱</h1>
       <h4>🗓️ {formatDateToLocale(indicators[0]?.fecha)}</h4>
       <hr/>
-      <form onSubmit={handleSubmitSearchInput}>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Buscar indicador..."
-          onChange={handleSearchInputText}
-          value={textSearch}
-        />
-      </form>
+      <div className="row">
+        <div className="col-12">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Buscar indicador..."
+            onChange={handleSearchInputText}
+            value={textSearch}
+          />
+        </div>
+        <div className="col-12">
+          <Filters filterByUnit={filterByUnit}/>
+        </div>
+      </div>
       <hr/>
       <div className="row row-cols-3">
         {
           loading ?
             <Loading/> :
-            !textSearch ?
-              indicators.map(indicator => (
-                <IndicatorCard
-                  key={indicator["codigo"]}
-                  indicator={indicator}
-                  showDetails={showDetails}
-                  handleClickIndicatorDetail={handleClickIndicatorDetail}
-                  handleCloseDetails={handleCloseDetails}
-                  handleShowDetails={handleShowDetails}
-                  indicatorDetail={indicatorDetail}
-                />
-              )) :
-              searchResult.map(indicator => (
-                <IndicatorCard
-                  key={indicator["codigo"]}
-                  indicator={indicator}
-                  showDetails={showDetails}
-                  handleClickIndicatorDetail={handleClickIndicatorDetail}
-                  handleCloseDetails={handleCloseDetails}
-                  handleShowDetails={handleShowDetails}
-                  indicatorDetail={indicatorDetail}
-                />
-              ))
+            data.map(indicator => (
+              <IndicatorCard
+                key={indicator["codigo"]}
+                indicator={indicator}
+                showDetails={showDetails}
+                handleClickIndicatorDetail={handleClickIndicatorDetail}
+                handleCloseDetails={handleCloseDetails}
+                handleShowDetails={handleShowDetails}
+                indicatorDetail={indicatorDetail}
+              />
+            ))
+        }
+        {
+          (data.length === 0) &&
+          <InfoMessage message={'No hay resultados...'} variant={"info"}/>
         }
       </div>
 
@@ -142,7 +130,7 @@ const IndicatorsApp = () => {
         loadingDetails={loadingDetails}
       />
 
-      <Footer />
+      <Footer/>
     </div>
   )
 }

@@ -2,7 +2,7 @@ import {Table} from "react-bootstrap";
 import {useRef} from "react";
 import {formatDateToLocale} from "../helpers/dateFormatter.js";
 import {clpFormat, percentFormat} from "../helpers/currencyFormatter.js";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 
 export const TableSerieDetail = ({series = [], unidad=''}) => {
@@ -11,7 +11,7 @@ export const TableSerieDetail = ({series = [], unidad=''}) => {
 
   return (
     <>
-      <h5 className="my-4">⭐️ Valores últimos 30 días:</h5>
+      <h5 className="my-4">⭐️ Valores último mes:</h5>
       <Table ref={table} striped bordered hover responsive>
         <thead>
         <tr>
@@ -22,7 +22,7 @@ export const TableSerieDetail = ({series = [], unidad=''}) => {
         <tbody>
         {
           series.map(serie => (
-            <tr key={uuidv4()}>
+            <tr key={uuid()}>
               <td>{formatDateToLocale(serie.fecha)}</td>
               <td className="text-center">
                 {

@@ -1,6 +1,5 @@
 import {Button, Card, ListGroup} from "react-bootstrap";
 import {clpFormat, percentFormat} from "../helpers/currencyFormatter.js";
-import {formatDateToLocale} from "../helpers/dateFormatter.js";
 
 export const IndicatorCard = ({
                                 indicator = {},
@@ -14,7 +13,7 @@ export const IndicatorCard = ({
   }
 
   return (
-    <div className="col mb-2 d-flex align-items-stretch">
+    <div className="col-12 col-sm-12 col-lg-4 mb-2 d-flex align-items-stretch">
       <Card className="w-100">
         <Card.Body>
           <ListGroup>
@@ -23,7 +22,7 @@ export const IndicatorCard = ({
             </ListGroup.Item>
             <ListGroup.Item>
               💰 Valor: {
-              indicator["unidad_medida"] === "Pesos" ?
+              indicator["unidad_medida"] === "Pesos" || indicator["unidad_medida"] === "Dólar" ?
                 clpFormat(indicator["valor"]) :
                 percentFormat(indicator["valor"])
             }
