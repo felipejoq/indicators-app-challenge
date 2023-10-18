@@ -11,9 +11,9 @@ en la página haciendo uso de los Hooks de react.js para mantener y manejar los 
 
 👉 [Live Demo](https://felipejoq.github.io/indicators-app-challenge/) 📊
 
-## Video Explicativo
+## 📹 Video Explicativo
 
-👉 📹 [Video Explicativo](https://youtu.be/y6ir5YiI1J0) 👀
+👉 [Video Explicativo](https://youtu.be/y6ir5YiI1J0) 👀
 
 ## Stack utilizado:
 
