@@ -1,6 +1,6 @@
 export const Footer = () => {
   return (
-    <footer className="text-center my-5 small">
+    <footer className="text-center mt-5 mb-2 small">
       <hr/>
       <p>
         🚀 Desarrollado por Felipe JQ <br />

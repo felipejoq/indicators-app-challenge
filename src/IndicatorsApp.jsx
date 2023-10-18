@@ -11,8 +11,8 @@ import {
   getIndicatorByUnit,
   getIndicators
 } from "./services/indicators.services.js";
-import {Badge} from "react-bootstrap";
 import {Filters} from "./components/Filters.jsx";
+import {Search} from "./components/Search.jsx";
 
 const IndicatorsApp = () => {
 
@@ -82,23 +82,18 @@ const IndicatorsApp = () => {
   }
 
   return (
-    <div className="container my-2">
+    <div className="container my-4 bg-light rounded p-4">
       <h1>Indicadores Económicos Chile 🇨🇱</h1>
-      <h4>🗓️ {formatDateToLocale(indicators[0]?.fecha)}</h4>
+      <h4><i className="bi bi-calendar4"></i> {formatDateToLocale(indicators[0]?.fecha)}</h4>
       <hr/>
       <div className="row">
-        <div className="col-12">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Buscar indicador..."
-            onChange={handleSearchInputText}
-            value={textSearch}
-          />
-        </div>
-        <div className="col-12">
-          <Filters filterByUnit={filterByUnit}/>
-        </div>
+        <Search
+          textSearch={textSearch}
+          handleSearchInputText={handleSearchInputText}
+        />
+        <Filters
+          filterByUnit={filterByUnit}
+        />
       </div>
       <hr/>
       <div className="row row-cols-3">

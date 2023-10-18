@@ -24,25 +24,25 @@ export const IndicatorDetails = ({loadingDetails, showDetails, handleCloseDetail
           <>
             <Modal.Header closeButton>
               <Modal.Title>
-                📝 {indicatorDetail["nombre"]} - Detalles
+                <i className="bi bi-card-checklist"></i> {indicatorDetail["nombre"]} - Detalles
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <ListGroup>
                 <ListGroup.Item>
-                  <span className="fw-bold">📊 Nombre: </span>
+                  <span className="fw-bold"><i className="bi bi-bar-chart-line"></i> Nombre: </span>
                   {indicatorDetail["nombre"]}
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <span className="fw-bold">🆔 Código: </span>
+                  <span className="fw-bold"><i className="bi bi-calculator-fill"></i> Código: </span>
                   {indicatorDetail["codigo"]}
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <span className="fw-bold">🗓️ Fecha: </span>
+                  <span className="fw-bold"><i className="bi bi-calendar4"></i> Fecha: </span>
                   {formatDateToLocale(indicatorDetail["fecha"])}
                 </ListGroup.Item>
                 <ListGroup.Item>
-                  <span className="fw-bold">💰 Valor: </span> {
+                  <span className="fw-bold"><i className="bi bi-wallet"></i> Valor: </span> {
                   indicatorDetail["unidad_medida"] === "Pesos" || indicatorDetail["unidad_medida"] === "Dólar" ?
                     clpFormat(indicatorDetail["valor"]) :
                     percentFormat(indicatorDetail["valor"])

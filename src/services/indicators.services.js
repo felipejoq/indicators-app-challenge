@@ -31,8 +31,12 @@ export const getIndicatorByTerm = (term, indicators = []) => {
 
 export const getIndicatorByUnit = (unit, indicators) => {
   return indicators.filter(indicator => {
-    if (indicator["unidad_medida"] === unit) {
-      return indicator;
+    if (unit !== "Todos") {
+      if (indicator["unidad_medida"] === unit) {
+        return indicator;
+      }
+    } else {
+      return indicators;
     }
   });
 }

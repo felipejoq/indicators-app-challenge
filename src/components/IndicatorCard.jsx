@@ -14,24 +14,24 @@ export const IndicatorCard = ({
 
   return (
     <div className="col-12 col-sm-12 col-lg-4 mb-2 d-flex align-items-stretch">
-      <Card className="w-100">
+      <Card className="w-100 shadow-sm mb-4">
         <Card.Body>
           <ListGroup>
             <ListGroup.Item className="fw-bold">
-              📊 {indicator["nombre"]}
+              <i className="bi bi-bar-chart-line"></i> {indicator["nombre"]}
             </ListGroup.Item>
             <ListGroup.Item>
-              💰 Valor: {
+              <i className="bi bi-wallet"></i> Valor: {
               indicator["unidad_medida"] === "Pesos" || indicator["unidad_medida"] === "Dólar" ?
                 clpFormat(indicator["valor"]) :
                 percentFormat(indicator["valor"])
             }
             </ListGroup.Item>
             <ListGroup.Item>
-              📐 {indicator["unidad_medida"]}
+              <i className="bi bi-rulers"></i> {indicator["unidad_medida"]}
             </ListGroup.Item>
             <ListGroup.Item>
-              🆔 Código: {indicator["codigo"]}
+              <i className="bi bi-calculator-fill"></i> Código: {indicator["codigo"]}
             </ListGroup.Item>
           </ListGroup>
         </Card.Body>
@@ -39,8 +39,8 @@ export const IndicatorCard = ({
           <Button
             onClick={() => handleClickDetails(indicator)}
             className="w-100"
-            variant="primary">
-            Detalles
+            variant="secondary">
+            <i className="bi bi-card-checklist"></i> Detalles
           </Button>
         </Card.Footer>
       </Card>

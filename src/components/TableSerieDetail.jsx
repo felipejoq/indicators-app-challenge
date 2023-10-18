@@ -11,12 +11,12 @@ export const TableSerieDetail = ({series = [], unidad=''}) => {
 
   return (
     <>
-      <h5 className="my-4">⭐️ Valores último mes:</h5>
+      <h5 className="my-4"><i className="bi bi-table"></i> Valores último mes:</h5>
       <Table ref={table} striped bordered hover responsive>
         <thead>
         <tr>
-          <th>🗓️ Fecha</th>
-          <th className="text-center">💰 Valor ({unidad})</th>
+          <th><i className="bi bi-calendar4"></i> Fecha</th>
+          <th className="text-center"><i className="bi bi-wallet"></i> Valor ({unidad})</th>
         </tr>
         </thead>
         <tbody>
