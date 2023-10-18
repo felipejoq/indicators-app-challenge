@@ -1,1 +1,1 @@
-# Indicators IndicatorsApp
+# Indicators App
