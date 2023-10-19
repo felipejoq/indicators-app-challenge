@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
 import {
-  getIndicatorByCode,
   getIndicatorByTerm,
   getIndicatorByUnit,
   getIndicators
@@ -43,7 +42,7 @@ export const useIndicators = () => {
       (async () => {
         try {
           setLoadingDetails(true);
-          const indicator = await getIndicatorByCode(codigo);
+          const indicator = await getIndicators(codigo);
           setIndicatorDetail({
             ...indicatorDetail,
             ...indicator
