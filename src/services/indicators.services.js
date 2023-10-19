@@ -9,21 +9,16 @@ const cleanIndicatorsData = (result) => {
   return indicatorsMap.filter(indicator => indicator["codigo"]);
 }
 
-export const getIndicators = async () => {
-  const response = await fetch(`${url}`);
-  if(!response.ok) {
-    throw new Error(errorMessage)
-  }
-  const result = await response.json();
-  return cleanIndicatorsData(result);
-}
-
-export const getIndicatorByCode = async (codigo) => {
+export const getIndicators = async (codigo = '') => {
   const response = await fetch(`${url}/${codigo}`);
-  if(!response.ok) {
+  if (!response.ok) {
     throw new Error(errorMessage)
   }
-  return await response.json();
+  if (codigo) {
+    return await response.json();
+  } else {
+    return cleanIndicatorsData(await response.json());
+  }
 }
 
 export const getIndicatorByTerm = (term, indicators = []) => {

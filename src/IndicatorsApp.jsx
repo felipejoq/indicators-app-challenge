@@ -62,7 +62,7 @@ const IndicatorsApp = () => {
         }
         {
           hasErrors.error &&
-            <InfoMessage message={hasErrors.message} variant={"danger"}/>
+          <InfoMessage message={hasErrors.message} variant={"danger"}/>
         }
       </div>
 
