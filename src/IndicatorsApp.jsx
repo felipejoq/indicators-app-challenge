@@ -14,16 +14,16 @@ const IndicatorsApp = () => {
     data,
     indicatorDetail,
     textSearch,
-    loading,
-    loadingDetails,
+    loader,
     showDetails,
     hasErrors,
     handleSearchInputText,
     filterByUnit,
     handleShowDetails,
-    handleCloseDetails,
     handleClickIndicatorDetail
-  } = useIndicators()
+  } = useIndicators();
+
+  const {loadingPage, loadingDetails} = loader;
 
   return (
     <div className="container my-4 bg-light rounded p-4">
@@ -42,7 +42,7 @@ const IndicatorsApp = () => {
       <hr/>
       <div className="row row-cols-3">
         {
-          loading ?
+          loadingPage ?
             <Loading/> :
             data.map(indicator => (
               <IndicatorCard
@@ -50,7 +50,7 @@ const IndicatorsApp = () => {
                 indicator={indicator}
                 showDetails={showDetails}
                 handleClickIndicatorDetail={handleClickIndicatorDetail}
-                handleCloseDetails={handleCloseDetails}
+                handleCloseDetails={handleShowDetails}
                 handleShowDetails={handleShowDetails}
                 indicatorDetail={indicatorDetail}
               />
@@ -68,7 +68,7 @@ const IndicatorsApp = () => {
 
       <IndicatorDetails
         showDetails={showDetails}
-        handleCloseDetails={handleCloseDetails}
+        handleCloseDetails={handleShowDetails}
         indicatorDetail={indicatorDetail}
         loadingDetails={loadingDetails}
       />
