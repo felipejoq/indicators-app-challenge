@@ -6,13 +6,15 @@ import {
 } from "../services/indicators.services.js";
 
 export const useIndicators = () => {
+  const [codigo, setCodigo] = useState('');
 
   const [showDetails, setShowDetails] = useState(false);
   const [textSearch, setTextSearch] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [loadingDetails, setLoadingDetails] = useState(false);
+  const [loader, setLoader] = useState({
+    loadingPage: true,
+    loadingDetails: true
+  })
 
-  const [codigo, setCodigo] = useState('');
   const [indicators, setIndicators] = useState([]);
   const [indicatorDetail, setIndicatorDetail] = useState({})
   const [data, setData] = useState([]);
@@ -22,45 +24,49 @@ export const useIndicators = () => {
     if (!codigo) {
       (async () => {
         try {
-          setLoading(true);
+          changeLoaders(true, false);
           const indicatorsClean = await getIndicators();
           setIndicators(indicatorsClean);
           setData(indicatorsClean);
-          setLoading(false);
-          setHasErrors({
-            error: false
-          });
+          changeLoaders(false, false);
+          setError(false);
         } catch (e) {
-          setHasErrors({
-            error: true,
-            message: e.message
-          });
-          setLoading(false);
+          setError(e)
+          changeLoaders(false, false);
         }
       })()
     } else {
       (async () => {
         try {
-          setLoadingDetails(true);
+          changeLoaders(false, true);
           const indicator = await getIndicators(codigo);
           setIndicatorDetail({
             ...indicatorDetail,
             ...indicator
           });
-          setLoadingDetails(false);
-          setHasErrors({
-            error: false
-          });
+          changeLoaders(false, false);
+          setError(false);
         } catch (e) {
-          setHasErrors({
-            error: true,
-            message: e.message
-          });
-          setLoadingDetails(false);
+          setError(e)
+          changeLoaders(false, false);
         }
       })()
     }
   }, [codigo]);
+
+  const setError = (error) => {
+    setHasErrors({
+      error,
+      message: error.message
+    });
+  }
+
+  const changeLoaders = (loadingPage, loadingDetails) => {
+    setLoader({
+      loadingPage,
+      loadingDetails
+    });
+  }
 
   const handleClickIndicatorDetail = (indicator) => {
     setIndicatorDetail({
@@ -71,27 +77,19 @@ export const useIndicators = () => {
     setCodigo(indicator["codigo"]);
   }
 
-  const handleSearchInputText = ({target}) => {
-    const {value} = target;
-    if (value.length > 0) {
-      setTextSearch(value);
-      setData(getIndicatorByTerm(value, indicators));
-    } else {
-      setTextSearch(value);
-      setData([...indicators])
-    }
+  const handleSearchInputText = ({target: {value}}) => {
+    setTextSearch(value);
+    value.length > 0 ?
+      setData(getIndicatorByTerm(value, indicators)) :
+      setData([...indicators]);
   }
 
   const filterByUnit = (term) => {
     setData(getIndicatorByUnit(term, indicators));
   }
 
-  const handleCloseDetails = (isShow) => {
-    setShowDetails(isShow)
-  };
-
-  const handleShowDetails = (isShow) => {
-    setShowDetails(isShow)
+  const handleShowDetails = () => {
+    setShowDetails(!showDetails)
   };
 
   return {
@@ -99,13 +97,11 @@ export const useIndicators = () => {
     indicators,
     indicatorDetail,
     textSearch,
-    loading,
-    loadingDetails,
+    loader,
     showDetails,
     hasErrors,
     handleSearchInputText,
     filterByUnit,
-    handleCloseDetails,
     handleShowDetails,
     handleClickIndicatorDetail
   }
