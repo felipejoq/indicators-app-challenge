@@ -1,19 +1,22 @@
-export const Search = ({textSearch, handleSearchInputText}) => {
-  return (
-    <div className="col-12">
-      <div className="input-group mb-3">
-            <span className="input-group-text" id="basic-addon1">
-              <i className="bi bi-search"></i>&nbsp;&nbsp;&nbsp;Buscar
-            </span>
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Escribir aquí..."
-          onChange={handleSearchInputText}
-          value={textSearch}
-        />
-      </div>
-    </div>
+import {Form, InputGroup} from "react-bootstrap";
 
+export const Search = ({handleTermSearch}) => {
+
+  const onChangeTerm = ({target}) => {
+    handleTermSearch(target.value)
+  }
+
+  return (
+      <InputGroup className="my-4">
+        <InputGroup.Text id="basic-addon1">
+          Buscar
+        </InputGroup.Text>
+        <Form.Control
+          onChange={onChangeTerm}
+          placeholder="Escribir aquí..."
+          aria-label="search"
+          aria-describedby="search-bar"
+        />
+      </InputGroup>
   );
 };
