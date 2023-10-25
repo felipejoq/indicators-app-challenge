@@ -4,6 +4,7 @@ import useFetch from "../hooks/useFetch.js";
 import {URL_SERVICE} from "../helpers/constants.js";
 import {TableSerie} from "./TableSerie.jsx";
 import {formatDateToLocale} from "../helpers/dateFormatters.js";
+import {valueFormat} from "../helpers/currencyFormatter.js";
 
 export const IndicatorDetails = ({indicator}) => {
   const [show, setShow] = useState(false);
@@ -55,7 +56,7 @@ export const IndicatorDetails = ({indicator}) => {
                     <i className="bi bi-bar-chart-line"></i> <span className="fw-bold">Nombre:</span> {data.nombre}
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    <i className="bi bi-coin"></i> <span className="fw-bold">Valor:</span> {`${data.serie[0].valor} ${data.unidad_medida}`}
+                    <i className="bi bi-coin"></i> <span className="fw-bold">Valor:</span> {valueFormat(data.serie[0].valor, data.unidad_medida)}
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <i className="bi bi-calendar4"></i> <span className="fw-bold">Fecha última medición:</span> {formatDateToLocale(new Date(data.serie[0].fecha))}
