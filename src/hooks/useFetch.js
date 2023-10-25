@@ -1,50 +1,52 @@
 import {useEffect, useState} from "react";
+import {getIndicators} from "../services/indicators.js";
 
-export const useFetch = (url) => {
+const useFetch = (url, all = true) => {
 
   const [state, setState] = useState({
-    data: [],
-    loading: true,
-    hasError: false,
-  });
+    data: [] || {},
+    isLoading: true,
+    error: {
+      has: false,
+      message: "No hay errores"
+    },
+  })
 
-  useEffect(() => {
-    getData(url)
-      .then(() => setError(false))
-      .catch(() => setError(false))
-  }, [url]);
-
-  const getData = async (url) => {
+  const getFetch = async () => {
     try {
-      setLoading(true);
-      const response = await fetch(url);
-      if (!response.ok) {
-        setError(true);
-      }
-      const data = await response.json();
-      setState(data);
-      setLoading(false);
+      setState({
+        ...state,
+        isLoading: true,
+      });
+
+      const data = await getIndicators(url, all);
+
+      setState({
+        ...state,
+        data,
+        isLoading: false,
+      });
+
     } catch (e) {
-      setError(true);
+      console.log(e)
+      setState({
+        ...state,
+        isLoading: false,
+        error: {
+          has: true,
+          message: e
+        }
+      });
     }
   }
 
-  const setError = (hasError) => {
-    setState({
-      ...state,
-      hasError
-    });
-  }
-
-  const setLoading = (loading) => {
-    setState({
-      ...state,
-      loading
-    });
-  }
-
+  useEffect(() => {
+    getFetch();
+  }, [url]);
 
   return {
-    ...state,
+    ...state
   }
-};
+}
+
+export default useFetch;

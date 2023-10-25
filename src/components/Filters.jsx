@@ -6,7 +6,7 @@ export const Filters = ({filterByUnit}) => {
 
   return (
     <div className="col-12">
-      <h6 className="my-2">
+      <h6 className="mb-4">
         {
           list.map(filter => (
             <Badge
