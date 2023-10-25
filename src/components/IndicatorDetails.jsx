@@ -1,71 +1,77 @@
-import {Button, ListGroup, Modal} from "react-bootstrap";
-import {TableSerieDetail} from "./TableSerieDetail.jsx";
-import {formatDateToLocale} from "../helpers/dateFormatter.js";
-import {clpFormat, percentFormat} from "../helpers/currencyFormatter.js";
-import {Loading} from "./Loader.jsx";
+import {Button, ListGroup, Modal, Table} from "react-bootstrap";
+import {useState} from "react";
+import useFetch from "../hooks/useFetch.js";
+import {URL_SERVICE} from "../helpers/constants.js";
+import {TableSerie} from "./TableSerie.jsx";
+import {formatDateToLocale} from "../helpers/dateFormatters.js";
 
-export const IndicatorDetails = ({loadingDetails, showDetails, handleCloseDetails, indicatorDetail = {}}) => {
+export const IndicatorDetails = ({indicator}) => {
+  const [show, setShow] = useState(false);
 
-  const closeModalDetail = () => {
-    handleCloseDetails(false)
-  }
+  const {
+    data,
+    isLoading,
+    error
+  } = useFetch(`${URL_SERVICE}/${indicator?.codigo}`, false)
+
+  const handleClose = () => {
+    setShow(false)
+  };
+  const handleShow = () => {
+    setShow(true);
+  };
 
   return (
+    <>
+      <Button
+        onClick={handleShow}
+        size="sm"
+        variant="primary">
+        <i className="bi bi-eye-fill"></i>
+      </Button>
 
-    <Modal
-      show={showDetails}
-      onHide={closeModalDetail}
-      size="lg"
-      centered
-    >
-      {
-        loadingDetails ?
-          <Loading/> :
-          <>
-            <Modal.Header closeButton>
-              <Modal.Title>
-                <i className="bi bi-card-checklist"></i> {indicatorDetail["nombre"]} - Detalles
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <ListGroup>
-                <ListGroup.Item>
-                  <span className="fw-bold"><i className="bi bi-bar-chart-line"></i> Nombre: </span>
-                  {indicatorDetail["nombre"]}
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <span className="fw-bold"><i className="bi bi-calculator-fill"></i> Código: </span>
-                  {indicatorDetail["codigo"]}
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <span className="fw-bold"><i className="bi bi-calendar4"></i> Fecha: </span>
-                  {formatDateToLocale(indicatorDetail["fecha"])}
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <span className="fw-bold"><i className="bi bi-wallet"></i> Valor: </span> {
-                  indicatorDetail["unidad_medida"] === "Pesos" || indicatorDetail["unidad_medida"] === "Dólar" ?
-                    clpFormat(indicatorDetail["valor"]) :
-                    percentFormat(indicatorDetail["valor"])
-                } {
-                  indicatorDetail["unidad_medida"] === "Porcentaje" ? null : indicatorDetail["unidad_medida"]
-                }
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <TableSerieDetail
-                    series={indicatorDetail["serie"]}
-                    unidad={indicatorDetail["unidad_medida"]}
-                  />
-                </ListGroup.Item>
-              </ListGroup>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={closeModalDetail}>
-                Cerrar
-              </Button>
-            </Modal.Footer>
-          </>
-
-      }
-    </Modal>
+      <Modal
+        show={show}
+        onHide={handleClose}
+        size="lg"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <i className="bi bi-list"></i> {data.nombre} - Detalles
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {
+            isLoading ?
+              "Cargando..." :
+              error.has ?
+                `Hubo un error: ${error.message}` :
+                <ListGroup>
+                  <ListGroup.Item>
+                    <i className="bi bi-hash"></i> <span className="fw-bold">Código:</span> {data.codigo}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <i className="bi bi-bar-chart-line"></i> <span className="fw-bold">Nombre:</span> {data.nombre}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <i className="bi bi-coin"></i> <span className="fw-bold">Valor:</span> {`${data.serie[0].valor} ${data.unidad_medida}`}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <i className="bi bi-calendar4"></i> <span className="fw-bold">Fecha última medición:</span> {formatDateToLocale(new Date(data.serie[0].fecha))}
+                  </ListGroup.Item>
+                  <ListGroup.Item>
+                    <TableSerie serie={data.serie} unidad={data.unidad_medida}/>
+                  </ListGroup.Item>
+                </ListGroup>
+          }
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 };
